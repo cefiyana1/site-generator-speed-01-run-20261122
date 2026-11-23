@@ -6,9 +6,9 @@
 
 High-speed drop-in replacement for `makefun-site 1.0.0` built for the [make.fun](https://make.fun/bounty/site-generator-speed-01-run-20261122) `Build a static site faster, 22 November 2026` bounty.
 
-## Architecture
-- `main.ts` -> `r.js`: 17-byte CJS lean-start wrapper with Liftoff-only / zero-background-thread V8 flags.
-- `sg.wasm`: End-to-end JSON-to-JSON C-to-WASM `v128` SIMD engine (Markdown lexer/inline, AST template renderer with site-level partial & post-card caching, direct 512 KiB streaming JSON output).
+## Architecture (v2)
+- `sg.node`: Freestanding zero-libc C11 + SSE2 N-API engine using direct Linux syscalls (`openat`/`read`/`write`/`mmap`), exact BMP NFKD lookup table, interned template symbol IDs (zero `memcmp` in render), site-level partial & post-card memoization, and single-slab JSON output.
+- `main.ts`: Zero-ESM CJS entrypoint invoking `sg.node` directly with automatic fallback to `solve.js`.
 - `solve.js`: Dependency-free ES module drop-in & fallback.
 
 ## Run

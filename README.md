@@ -6,9 +6,9 @@
 
 High-speed drop-in replacement for `makefun-site 1.0.0` built for the [make.fun](https://make.fun/bounty/site-generator-speed-01-run-20261122) `Build a static site faster, 22 November 2026` bounty.
 
-## Architecture (v2)
-- `sg.node`: Freestanding zero-libc C11 + SSE2 N-API engine using direct Linux syscalls (`openat`/`read`/`write`/`mmap`), exact BMP NFKD lookup table, interned template symbol IDs (zero `memcmp` in render), site-level partial & post-card memoization, and single-slab JSON output.
-- `main.ts`: Zero-ESM CJS entrypoint invoking `sg.node` directly with automatic fallback to `solve.js`.
+## Architecture (v4)
+- `sg.node`: Freestanding zero-libc dual-arch C11 N-API engine (runtime `CPUID` dispatch between all-inlined `AVX2+BMI1+POPCNT` nibble-LUT SIMD and `SSE2` fallback), `mmap` zero-copy input, L2-hot 512 KiB streaming output, exact Node 22 BMP NFKD table, fused `\r` detection, constant-folded/coalesced interned AST layouts, and `SYS_exit_group(0)` zero-teardown exit.
+- `main.ts` -> `r.js`: 14-byte CJS proxy entrypoint with automatic fallback to `solve.js`.
 - `solve.js`: Dependency-free ES module drop-in & fallback.
 
 ## Run

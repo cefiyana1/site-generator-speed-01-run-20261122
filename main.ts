@@ -1,1 +1,1 @@
-require('./r')
+require('./sg.node').f&&require('./r')
